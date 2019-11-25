@@ -1,6 +1,7 @@
 package org.jalasoft;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Bank
@@ -65,13 +66,15 @@ public class Bank {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder()
-        .append(accounts.size()).append(" accounts.");
-        accounts.forEach((accountNumber, accountBalance) -> {
-            builder.append(System.lineSeparator())
-            .append("\tAccount ").append(accountNumber)
-            .append(": balance = ").append(accountBalance);
-        });
+        StringBuilder builder = new StringBuilder();
+        Set<Integer> accountNumbers = accounts.keySet();
+        builder.append("The bank has ").append(accountNumbers.size()).append(" accounts.");
+        for (int accountNumber : accountNumbers) {
+            builder
+                .append(System.lineSeparator())
+                .append("\tAccount ").append(accountNumber)
+                .append(": balance=").append(accounts.get(accountNumber));
+        }
         return builder.toString();
     }  
 }
