@@ -12,7 +12,7 @@ public class Bank {
      * Key: represent the account number
      * Value: represent the balance
      */
-    private HashMap<Integer, Integer> accounts;
+    private HashMap<Integer, BankAccount> accounts;
 
 
     private int nextAccount;
@@ -31,7 +31,8 @@ public class Bank {
      */
     public int newAccount() {
         int currentAccount = nextAccount++;
-        accounts.put(currentAccount, 0);    
+        BankAccount bankAccount = new BankAccount(currentAccount, AccountOrigin.LOCAL);
+        accounts.put(currentAccount, bankAccount);    
         return currentAccount;
     }
 
@@ -45,7 +46,7 @@ public class Bank {
      * @return a instance of BankAccount
      */
     public BankAccount getBankAccount(int accountNumber) {
-        return null;
+        return accounts.get(accountNumber);
     }
 
     /**
@@ -57,12 +58,9 @@ public class Bank {
      * TODO: Implementation is very unefficient
      */
     public boolean payInterest() {
-        Set<Integer> accountNumbers = accounts.keySet();
-        
-        for (int accountNumber : accountNumbers) {
-            int newBalance = (int) (accounts.get(accountNumber) * (1 + interestRate));
-            accounts.put(accountNumber, newBalance);
-        }
+        accounts.values().forEach(account -> {
+            account.deposit((int) (account.getBalance() * interestRate));
+        });
         return true;
     }
 
@@ -75,9 +73,8 @@ public class Bank {
             builder
                 .append(System.lineSeparator())
                 .append("\tAccount ").append(accountNumber)
-                .append(": balance=").append(accounts.get(accountNumber));
+                .append(": balance=").append(accounts.get(accountNumber).getBalance());
         }
-
         return builder.toString();
     }  
 }

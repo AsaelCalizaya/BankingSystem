@@ -4,6 +4,12 @@ package org.jalasoft;
  * BankService
  */
 public class BankService {
+
+    private Bank bank;
+
+    public BankService() {
+        bank = new Bank();
+    }
     
     /**
      * Ask a given to account to bank and then grabs the balance
@@ -12,7 +18,7 @@ public class BankService {
      * @return balance of a given account
      */
     public int getBalance(int accountNumber) {
-        return 0;
+        return bank.getBankAccount(accountNumber).getBalance();
     }
 
     /**
@@ -33,12 +39,10 @@ public class BankService {
      * @return if the transaction was executed successfully
      */
     public boolean deposit(int accountNumber, int amount) {
-        //accounts.put(accountNumber, accounts.get(accountNumber) + amount);
-        return true;
+        return bank.getBankAccount(accountNumber).deposit(amount);
     }
 
-
-     /**
+    /**
      * Verify if the amount requested can be assigned to a given account based on
      * its current balance
      * 
@@ -47,9 +51,7 @@ public class BankService {
      * @return whether the amount was approved or not
      */
     public boolean authorizeLoan(int accountNumber, int loanAmount) {
-        //int balance = accounts.get(accountNumber);
-        //return balance >= loanAmount / 2;
-        return false;
+        return bank.getBankAccount(accountNumber).hasEnoughCollateral(loanAmount);
     }
 
     /**
@@ -59,7 +61,7 @@ public class BankService {
      * @return whether the interest payment process was successful or not
      */
     public boolean payInterest() { 
-        return false;
+        return bank.payInterest();
     }
 
     /**
@@ -67,6 +69,6 @@ public class BankService {
      * @return the bank information with using the bank own format
      */
     public String getBankInformation() {
-        return "";
+        return bank.toString();
     }
 }
