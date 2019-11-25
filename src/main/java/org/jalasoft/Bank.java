@@ -1,7 +1,6 @@
 package org.jalasoft;
 
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Bank
@@ -12,7 +11,7 @@ public class Bank {
      * Key: represent the account number
      * Value: represent the balance
      */
-    private HashMap<Integer, Integer> accounts;
+    private HashMap<Integer, BankAccount> accounts;
 
 
     private int nextAccount;
@@ -31,7 +30,8 @@ public class Bank {
      */
     public int newAccount() {
         int currentAccount = nextAccount++;
-        accounts.put(currentAccount, 0);    
+        BankAccount bankAccount = new BankAccount(currentAccount, AccountOrigin.LOCAL);
+        accounts.put(currentAccount, bankAccount);    
         return currentAccount;
     }
 
@@ -45,7 +45,7 @@ public class Bank {
      * @return a instance of BankAccount
      */
     public BankAccount getBankAccount(int accountNumber) {
-        return null;
+        return accounts.get(accountNumber);
     }
 
     /**
@@ -57,27 +57,21 @@ public class Bank {
      * TODO: Implementation is very unefficient
      */
     public boolean payInterest() {
-        Set<Integer> accountNumbers = accounts.keySet();
-        
-        for (int accountNumber : accountNumbers) {
-            int newBalance = (int) (accounts.get(accountNumber) * (1 + interestRate));
-            accounts.put(accountNumber, newBalance);
-        }
+        accounts.values().forEach(account -> {
+            account.deposit((int) (account.getBalance() * interestRate));
+        });
         return true;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        Set<Integer> accountNumbers = accounts.keySet();
-        builder.append("The bank has ").append(accountNumbers.size()).append(" accounts.");
-        for (int accountNumber : accountNumbers) {
-            builder
-                .append(System.lineSeparator())
-                .append("\tAccount ").append(accountNumber)
-                .append(": balance=").append(accounts.get(accountNumber));
-        }
-
+        StringBuilder builder = new StringBuilder()
+        .append(accounts.size()).append(" accounts.");
+        accounts.forEach((accountNumber, accountBalance) -> {
+            builder.append(System.lineSeparator())
+            .append("\tAccount ").append(accountNumber)
+            .append(": balance = ").append(accountBalance);
+        });
         return builder.toString();
     }  
 }
