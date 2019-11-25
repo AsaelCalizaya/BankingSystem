@@ -73,7 +73,7 @@ public class Bank {
             builder
                 .append(System.lineSeparator())
                 .append("\tAccount ").append(accountNumber)
-                .append(": balance=").append(accounts.get(accountNumber));
+                .append(": balance=").append(accounts.get(accountNumber).getBalance());
         }
         return builder.toString();
     }  
